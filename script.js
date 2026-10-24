@@ -33,9 +33,30 @@ if (main && siteTopography) {
     </svg>`;
 }
 
-addEventListener('scroll', () => {
+const scrollProgress = document.querySelector('.scroll-progress span');
+const navSectionLinks = [...menu.querySelectorAll('a[href^="#"]')];
+const trackedSections = navSectionLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+const syncScrollUi = () => {
   header.classList.toggle('scrolled', scrollY > 18);
-}, { passive: true });
+  const scrollable = document.documentElement.scrollHeight - innerHeight;
+  const progress = scrollable > 0 ? Math.min(1, Math.max(0, scrollY / scrollable)) : 0;
+  scrollProgress?.style.setProperty('--scroll-progress', progress);
+
+  const marker = scrollY + Math.min(innerHeight * .36, 330);
+  let activeId = '';
+  trackedSections.forEach(section => {
+    if (section.offsetTop <= marker) activeId = section.id;
+  });
+  navSectionLinks.forEach(link => {
+    const active = link.getAttribute('href') === `#${activeId}`;
+    link.classList.toggle('is-active', active);
+    if (active) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+  });
+};
+addEventListener('scroll', syncScrollUi, { passive: true });
+addEventListener('resize', syncScrollUi, { passive: true });
+syncScrollUi();
 
 toggle.addEventListener('click', () => {
   const open = menu.classList.toggle('open');
@@ -131,6 +152,31 @@ document.querySelector('#year').textContent = new Date().getFullYear();
 // A contagem é consultada pela função segura da Vercel; a chave não fica exposta no navegador.
 const youtubeSubscribersEndpoint = document.body.dataset.youtubeSubscribersEndpoint || '/api/youtube-subscribers';
 const subscriberTargets = document.querySelectorAll('[data-youtube-subscribers]');
+const numberFormatter = new Intl.NumberFormat('pt-BR');
+const subscriberAnimations = new WeakMap();
+const animateSubscriberCount = (target, endValue) => {
+  const end = Number(endValue);
+  if (!Number.isFinite(end)) return;
+  const current = Number(target.textContent.replace(/\D/g, ''));
+  const firstAnimation = target.dataset.countAnimated !== 'true';
+  const start = firstAnimation ? Math.max(0, Math.round(end * .84)) : (Number.isFinite(current) ? current : 0);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || start === end) {
+    target.textContent = numberFormatter.format(end);
+    target.dataset.countAnimated = 'true';
+    return;
+  }
+  cancelAnimationFrame(subscriberAnimations.get(target));
+  const startedAt = performance.now();
+  const duration = 1050;
+  const step = now => {
+    const progress = Math.min(1, (now - startedAt) / duration);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    target.textContent = numberFormatter.format(Math.round(start + (end - start) * eased));
+    if (progress < 1) subscriberAnimations.set(target, requestAnimationFrame(step));
+    else target.dataset.countAnimated = 'true';
+  };
+  subscriberAnimations.set(target, requestAnimationFrame(step));
+};
 const updateSubscriberCount = async () => {
   if (!subscriberTargets.length || location.protocol === 'file:') return;
   try {
@@ -139,8 +185,7 @@ const updateSubscriberCount = async () => {
     const { subscriberCount } = await response.json();
     const count = Number(subscriberCount);
     if (!Number.isFinite(count)) return;
-    const formatted = new Intl.NumberFormat('pt-BR').format(count);
-    subscriberTargets.forEach(target => { target.textContent = formatted; });
+    subscriberTargets.forEach(target => animateSubscriberCount(target, count));
   } catch (error) {
     console.warn('A contagem de inscritos não foi atualizada.', error);
   }
@@ -152,23 +197,36 @@ setInterval(updateSubscriberCount, 5 * 60 * 1000);
 const twitchStatusEndpoint = document.body.dataset.twitchStatusEndpoint || '/api/twitch-status';
 const twitchStatuses = [...document.querySelectorAll('[data-twitch-status]')];
 const twitchTag = document.querySelector('.tag-live');
-const setTwitchState = (live, text) => {
+const twitchDetails = document.querySelector('[data-twitch-details]');
+const twitchTitle = document.querySelector('[data-twitch-title]');
+const twitchGame = document.querySelector('[data-twitch-game]');
+const twitchViewers = document.querySelector('[data-twitch-viewers]');
+const setTwitchState = stream => {
+  const live = Boolean(stream?.live);
+  const text = live ? 'Twitch · Ao vivo' : 'Twitch · Offline';
   twitchStatuses.forEach(status => { status.textContent = text; });
   twitchTag.classList.toggle('is-live', live);
+  twitchTag.setAttribute('aria-label', live ? `Twitch ao vivo: ${stream.title || 'Live agora'}` : 'Twitch de Yuuketts: offline');
+  if (!twitchDetails) return;
+  twitchDetails.hidden = !live;
+  if (!live) return;
+  twitchTitle.textContent = stream.title || 'Live agora';
+  twitchGame.textContent = stream.gameName || 'Ao vivo';
+  twitchViewers.textContent = numberFormatter.format(Number(stream.viewerCount) || 0);
 };
 const updateTwitchStatus = async () => {
   if (!twitchStatuses.length || !twitchTag) return;
   if (location.protocol === 'file:') {
-    setTwitchState(false, 'Twitch · Offline');
+    setTwitchState({ live: false });
     return;
   }
   try {
     const response = await fetch(twitchStatusEndpoint, { cache: 'no-store' });
     if (!response.ok) throw new Error('Não foi possível consultar a Twitch.');
-    const { live } = await response.json();
-    setTwitchState(Boolean(live), live ? 'Twitch · Ao vivo' : 'Twitch · Offline');
+    const stream = await response.json();
+    setTwitchState(stream);
   } catch (error) {
-    setTwitchState(false, 'Twitch · Offline');
+    setTwitchState({ live: false });
     console.warn('O status da Twitch não foi atualizado.', error);
   }
 };

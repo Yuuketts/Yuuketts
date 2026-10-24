@@ -8,13 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260903-24" />
+    <link rel="stylesheet" href="style.css?v=20261024-interactive1" />
     <style>
-      .role-marquee{position:relative;z-index:2;overflow:hidden;padding:19px 0;background:#1a1a1a;color:#d8cfc0;border-block:1px solid rgba(255,255,255,.13)}
+      .role-marquee{position:relative;z-index:2;overflow:hidden;padding:19px 0;background:#1a1a1a;color:#d8cfc0;border-block:1px solid rgba(255,255,255,.13);isolation:isolate}
       .role-marquee__track{display:flex;width:max-content;will-change:transform;animation:role-marquee-scroll 24s linear infinite}
-      .role-marquee__group{display:flex;align-items:center;gap:22px;padding-right:22px;flex:none;white-space:nowrap}
+      .role-marquee__group{display:flex;align-items:center;justify-content:space-around;gap:22px;min-width:100vw;padding:0 28px;flex:none;white-space:nowrap}
       .role-marquee__group span{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
       .role-marquee__group b{font-size:16px;color:#fff;font-weight:400}
+      .role-marquee:before,.role-marquee:after{content:"";position:absolute;z-index:2;top:0;bottom:0;width:52px;pointer-events:none}.role-marquee:before{left:0;background:linear-gradient(90deg,var(--ink),transparent)}.role-marquee:after{right:0;background:linear-gradient(-90deg,var(--ink),transparent)}
       @keyframes role-marquee-scroll{to{transform:translateX(-50%)}}
       @media (prefers-reduced-motion:reduce){.role-marquee__track{animation:none}}
       .social-tabs{margin-top:64px;padding:18px;border:1px solid rgba(26,26,26,.13);border-radius:28px;background:rgba(227,220,207,.5);box-shadow:0 18px 42px rgba(48,38,31,.08)}
@@ -32,6 +33,7 @@
   </head>
   <!-- As credenciais de YouTube e Twitch ficam somente nas variáveis de ambiente da Vercel. -->
   <body>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
     <div class="cursor-glow" aria-hidden="true"></div>
     <div class="site-topography" aria-hidden="true"><svg viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice"><g class="contour contour-a"><path d="M-70 195C-6 65 135 10 258 65c92 41 117 135 69 200-51 69-148 87-236 62C9 303-25 260-70 195Z"/><path d="M-28 192C20 93 127 54 220 94c71 31 90 103 53 155-39 54-116 68-186 47-63-19-89-58-115-104Z"/><path d="M16 188c37-71 111-94 172-67 48 21 60 69 37 108-26 44-85 54-136 37-46-16-62-45-73-78Z"/><path d="M60 185c25-43 69-55 103-39 27 13 34 40 21 63-15 26-50 32-80 22-27-10-38-27-44-46Z"/></g><g class="contour contour-b"><path d="M386-80c118-28 226 24 254 116 23 77-38 150-123 176-83 25-185-6-220-81-31-65 6-163 89-211Z"/><path d="M405-40c91-22 173 17 193 84 17 56-27 109-94 130-65 20-145-5-172-59-24-48 5-122 73-155Z"/><path d="M424-4c66-16 125 12 140 61 12 41-20 80-68 95-47 14-104-4-123-44-17-35 3-88 51-111Z"/><path d="M445 29c40-10 76 7 85 37 7 25-12 49-42 58-29 9-64-3-76-27-10-21 2-52 33-68Z"/></g><g class="contour contour-c"><path d="M790 166c89-74 220-56 283 28 55 73 25 176-55 231-80 55-194 48-260-21-60-63-48-173 32-238Z"/><path d="M815 196c69-58 173-44 223 22 43 57 20 137-43 180-63 44-153 39-205-16-47-50-38-135 25-186Z"/><path d="M841 224c50-43 126-33 163 16 32 43 15 103-32 135-47 33-115 29-154-12-36-38-29-103 23-139Z"/><path d="M869 251c30-27 76-21 99 10 19 26 9 63-19 82-29 20-70 18-94-7-21-23-17-63 14-85Z"/></g><g class="contour contour-d"><path d="M177 535c103-93 260-77 334 20 65 85 36 207-55 274-90 66-226 56-302-23-68-71-65-185 23-271Z"/><path d="M207 561c80-73 203-60 261 16 50 67 28 161-44 214-71 53-180 45-240-17-53-55-51-145 23-213Z"/><path d="M238 587c58-53 148-44 190 12 37 49 21 118-32 157-53 39-134 33-178-12-39-41-37-108 20-157Z"/><path d="M271 614c35-33 90-27 116 8 23 30 13 73-19 97-33 24-83 20-111-9-25-26-24-69 14-96Z"/></g><g class="contour contour-e"><path d="M672 577c105-82 255-55 317 46 54 88 13 207-82 261-94 54-224 30-281-57-52-79-43-181 46-250Z"/><path d="M703 601c81-64 198-42 248 38 43 69 10 163-64 205-73 42-175 23-220-45-41-62-34-143 36-198Z"/><path d="M735 625c58-47 143-30 178 26 31 49 8 117-46 148-53 31-128 17-161-32-29-45-24-104 29-142Z"/><path d="M768 649c35-29 87-18 109 17 19 31 5 74-29 94-33 19-80 11-101-20-18-28-15-64 21-91Z"/></g><g class="contour contour-f"><path d="M1037 576c70-47 150-22 185 39 31 53 6 124-52 155-57 31-132 13-166-39-30-47-25-116 33-155Z"/><path d="M1058 598c52-35 112-16 139 31 23 40 5 93-39 117-43 23-100 10-126-30-23-36-19-88 26-118Z"/><path d="M1080 620c34-23 73-10 90 20 15 26 3 60-25 76-28 15-64 6-81-20-15-24-12-57 16-76Z"/></g></svg></div>
     <header class="site-header" id="topo">
@@ -56,14 +58,14 @@
         <div class="hero-visual reveal delay-1" aria-label="Ilustração da fursona de Yuuketts">
           <svg class="topographic-lines" viewBox="0 0 600 600" aria-hidden="true"><path d="M70 205C142 144 190 176 239 128s122-78 182-34 84 42 119 8"/><path d="M54 294c73-61 126-29 179-83s124-83 191-38 99 28 126-4"/><path d="M58 383c69-48 129-11 179-64s124-72 185-29 96 31 128 0"/><path d="M72 470c59-50 118-17 170-58s119-49 175-7 94 38 117 7"/><path d="M104 540c47-40 95-17 145-46s109-29 157 10 79 32 101 3"/></svg>
           <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-          <div class="avatar"><svg class="avatar-image" viewBox="0 0 365 365" role="img" aria-label="Ilustração original da fursona de Yuuketts, com pelo bege, óculos redondos e colete azul"><defs><clipPath id="yuuketts-avatar-mask"><circle cx="182.5" cy="182.5" r="182.5" /></clipPath></defs><image href="assets/yuuketts-fursona-hero.png" width="365" height="365" preserveAspectRatio="xMidYMid slice" clip-path="url(#yuuketts-avatar-mask)" /></svg></div>
-          <a class="floating-tag tag-live" href="https://www.twitch.tv/yuuketts" target="_blank" rel="noopener noreferrer"><i></i> <span data-twitch-status>Twitch · Offline</span></a>
+          <div class="avatar"><svg class="avatar-image" viewBox="0 0 365 365" role="img" aria-label="Ilustração da fursona de Yuuketts, um mini Australian Shepherd marrom e creme com óculos redondos"><defs><clipPath id="yuuketts-aussie-mask"><circle cx="182.5" cy="182.5" r="181" /></clipPath></defs><image href="assets/yuuketts-aussie-hero.png" x="20" y="0" width="325" height="406" preserveAspectRatio="xMidYMid meet" clip-path="url(#yuuketts-aussie-mask)" /></svg></div>
+          <a class="floating-tag tag-live" href="https://www.twitch.tv/yuuketts" target="_blank" rel="noopener noreferrer"><i></i><span data-twitch-status>Twitch · Offline</span><span class="twitch-live-card" data-twitch-details hidden><strong data-twitch-title>Live agora</strong><small><b data-twitch-game>Ao vivo</b><span aria-hidden="true"> · </span><b data-twitch-viewers>0</b> assistindo</small><span class="twitch-live-cta">Abrir na Twitch ↗</span></span></a>
           <div class="floating-tag tag-love">✦ Em edição</div>
           <a class="floating-tag tag-subscribers" href="https://www.youtube.com/@Yuuketts" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span> YouTube · <b data-youtube-subscribers>709</b> inscritos</a>
         </div>
       </section>
 
-      <section class="role-marquee" aria-label="Yuuketts é criador de conteúdo, streamer, editor de vídeo e foto, e gamer"><div class="role-marquee__track"><div class="role-marquee__group"><span>Criador de conteúdo</span><b>✦</b><span>Streamer</span><b>✦</b><span>Editor de vídeo e foto</span><b>✦</b><span>Gamer</span><b>✦</b></div><div class="role-marquee__group" aria-hidden="true"><span>Criador de conteúdo</span><b>✦</b><span>Streamer</span><b>✦</b><span>Editor de vídeo e foto</span><b>✦</b><span>Gamer</span><b>✦</b></div></div></section>
+      <section class="role-marquee" aria-label="Yuuketts é criador de conteúdo, gamer e streamer, main Omen e main Fika, e Aussie Dog"><div class="role-marquee__track"><div class="role-marquee__group"><span>Criador de Conteúdo</span><b>✦</b><span>Gamer e Streamer</span><b>✦</b><span>Main Omen e Main Fika</span><b>✦</b><span>Aussie Dog</span><b>✦</b></div><div class="role-marquee__group" aria-hidden="true"><span>Criador de Conteúdo</span><b>✦</b><span>Gamer e Streamer</span><b>✦</b><span>Main Omen e Main Fika</span><b>✦</b><span>Aussie Dog</span><b>✦</b></div></div></section>
 
       <section class="about section" id="sobre">
         <div class="container about-grid">
@@ -115,6 +117,6 @@
     </main>
 
     <footer><div class="container footer-inner"><a class="brand" href="#topo" aria-label="Início de Yuuketts">Yuuketts<span>•</span></a><div class="footer-socials"><a href="https://www.youtube.com/@Yuuketts" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><img src="https://cdn.simpleicons.org/youtube/D8CFC0" alt="" /></a><a href="https://www.instagram.com/yuuketts.vlr/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/D8CFC0" alt="" /></a><a href="https://www.tiktok.com/@yuuketts.vlr" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><img src="https://cdn.simpleicons.org/tiktok/D8CFC0" alt="" /></a><a href="https://www.twitch.tv/yuuketts" target="_blank" rel="noopener noreferrer" aria-label="Twitch"><img src="https://cdn.simpleicons.org/twitch/D8CFC0" alt="" /></a><a href="https://discord.gg/FVC785BVWw" target="_blank" rel="noopener noreferrer" aria-label="Discord"><img src="https://cdn.simpleicons.org/discord/D8CFC0" alt="" /></a></div><small>© <span id="year"></span> Yuuketts. Todos os direitos reservados.</small></div></footer>
-    <script src="script.js?v=20260903-18"></script>
+    <script src="script.js?v=20261024-interactive1"></script>
   </body>
 </html>
