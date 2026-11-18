@@ -61,7 +61,7 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
     texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
 
     const softDepth = new THREE.Mesh(
-      new THREE.PlaneGeometry(2.42, 5.64),
+      new THREE.PlaneGeometry(2.58, 5.64),
       new THREE.MeshBasicMaterial({
         map: texture,
         color: 0x3a211c,
@@ -76,7 +76,7 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
     character.add(softDepth);
 
     const artwork = new THREE.Mesh(
-      new THREE.PlaneGeometry(2.42, 5.64),
+      new THREE.PlaneGeometry(2.58, 5.64),
       new THREE.MeshBasicMaterial({
         map: texture,
         transparent: true,

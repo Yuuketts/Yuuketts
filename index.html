@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20261117-chokki5" />
+    <link rel="stylesheet" href="style.css?v=20261117-chokki8" />
     <style>
       .role-marquee{position:relative;z-index:2;overflow:hidden;padding:19px 0;background:#1a1a1a;color:#d8cfc0;border-block:1px solid rgba(255,255,255,.13);isolation:isolate}
       .role-marquee__track{display:flex;width:max-content;will-change:transform;animation:role-marquee-scroll 24s linear infinite}
@@ -49,18 +49,21 @@
 
     <main>
       <svg class="topography-defs" aria-hidden="true"><defs><filter id="topography-motion-filter" x="-8%" y="-8%" width="116%" height="116%"><feTurbulence type="fractalNoise" baseFrequency=".008 .014" numOctaves="2" seed="7" result="motion-noise"><animate attributeName="baseFrequency" values=".008 .014;.015 .007;.008 .014" dur="11s" repeatCount="indefinite" /></feTurbulence><feDisplacementMap in="SourceGraphic" in2="motion-noise" scale="18" xChannelSelector="R" yChannelSelector="G" /></filter></defs></svg>
-      <section class="hero container">
-        <div class="hero-copy reveal">
-          <p class="eyebrow"><span></span> Vídeos, lives e comunidade</p>
-          <h1>Hewwo, sou<br /><em>o Yuuki!</em></h1>
-          <p class="hero-description">Eu sou o Yuuki. Nas redes, você me encontra como <strong>Yuuketts</strong>; e o Chokki é o personagem que representa esse cantinho, entre vídeos, lives e comunidade.</p>
-          <a class="button button-dark" href="#redes">Conheça minhas redes <span aria-hidden="true">↓</span></a>
-        </div>
-        <div class="hero-visual reveal delay-1" aria-label="Chokki, personagem de Yuuki, em uma cena 3D interativa">
-          <div class="chokki-stars" aria-hidden="true"><i></i><i></i><i></i></div>
-          <div class="hero-webgl" data-hero-webgl aria-hidden="true"></div>
-          <img class="hero-fallback" src="assets/chokki-fullbody-v2.png" alt="Chokki de corpo inteiro, com óculos, roupa creme e detalhes verde-água" />
-          <div class="character-signature"><strong>Chokki</strong><span>personagem do Yuuki</span></div>
+      <section class="hero-shell" aria-label="Introdução interativa de Yuuki e Chokki">
+        <div class="hero container">
+          <div class="hero-copy reveal">
+            <p class="eyebrow"><span></span> Vídeos, lives e comunidade</p>
+            <h1>Hewwo, sou<br /><em>o Yuuki!</em></h1>
+            <p class="hero-description">Eu sou o Yuuki. Nas redes, você me encontra como <strong>Yuuketts</strong>; e o Chokki é o personagem que representa esse cantinho, entre vídeos, lives e comunidade.</p>
+            <a class="button button-dark" href="#redes">Conheça minhas redes <span aria-hidden="true">↓</span></a>
+          </div>
+          <div class="hero-visual reveal delay-1" aria-label="Chokki, personagem de Yuuki, em uma cena 3D interativa">
+            <div class="chokki-stars" aria-hidden="true"><i></i><i></i><i></i></div>
+            <div class="hero-webgl" data-hero-webgl aria-hidden="true"></div>
+            <img class="hero-fallback" src="assets/chokki-fullbody-v2.png" alt="Chokki de corpo inteiro, com óculos, roupa creme e detalhes verde-água" />
+            <div class="character-signature"><strong>Chokki</strong><span>personagem do Yuuki</span></div>
+          </div>
+          <div class="hero-scroll-cue" aria-hidden="true"><span>Role para conhecer</span><i>↓</i></div>
         </div>
       </section>
 
@@ -94,7 +97,19 @@
         <div class="container">
           <div class="setup-heading reveal"><p class="eyebrow"><span></span> Por trás das lives</p><h2>Meu <em>setup</em></h2><p>As ferramentas que acompanham cada jogo, vídeo e conversa por aqui!</p></div>
           <div class="setup-grid">
-            <article class="setup-card hardware reveal"><div class="setup-card-title"><span class="setup-symbol">⌘</span><div><p>Configuração</p><h3>Hardware</h3></div></div><dl><div><dt>Processador</dt><dd><a href="https://www.google.com/search?q=Intel+Core+i3-12100F" target="_blank" rel="noopener noreferrer">Intel Core i3-12100F <span>↗</span></a></dd></div><div><dt>Placa de vídeo</dt><dd><a href="https://www.google.com/search?q=PowerColor+Red+Devil+Radeon+RX+6700+XT+12GB" target="_blank" rel="noopener noreferrer">PowerColor Red Devil Radeon RX 6700 XT 12 GB <span>↗</span></a></dd></div><div><dt>Placa-mãe</dt><dd><a href="https://www.google.com/search?q=Revenger+H610+LGA+1700+DDR4" target="_blank" rel="noopener noreferrer">Revenger H610 LGA 1700 DDR4 <span>↗</span></a></dd></div><div><dt>Memória RAM</dt><dd><a href="https://www.google.com/search?q=KingFast+16GB+2x8GB+DDR4+3200MHz" target="_blank" rel="noopener noreferrer">KingFast 16 GB (2×8 GB) DDR4 3200 MHz <span>↗</span></a></dd></div><div><dt>SSD</dt><dd><a href="https://www.google.com/search?q=Adata+Legend+710+512GB" target="_blank" rel="noopener noreferrer">Adata Legend 710 512 GB <span>↗</span></a></dd></div><div><dt>Monitor</dt><dd><a href="https://www.google.com/search?q=LG+UltraGear+24GS60F-B+24+IPS+180Hz" target="_blank" rel="noopener noreferrer">LG UltraGear 24GS60F-B · 24” IPS · 180 Hz <span>↗</span></a></dd></div></dl></article>
+            <article class="setup-card hardware reveal">
+              <div class="setup-card-title"><span class="setup-symbol">⌘</span><div><p>Configuração</p><h3>Hardware</h3></div></div>
+              <p class="hardware-hint">Passe o mouse ou use o teclado para ver cada peça em 3D.</p>
+              <dl>
+                <div class="hardware-row" data-part="cpu"><dt>Processador</dt><dd><a href="https://www.google.com/search?q=AMD+Ryzen+5+7600" target="_blank" rel="noopener noreferrer">AMD Ryzen 5 7600 · 6C/12T · até 5,1 GHz <span>↗</span></a></dd><div class="part-preview" aria-hidden="true"><small>AM5 · 65 W</small><strong>RYZEN 5</strong><span>7600</span><i class="part-object part-object--cpu"></i></div></div>
+                <div class="hardware-row" data-part="gpu"><dt>Placa de vídeo</dt><dd><a href="https://www.google.com/search?q=ZOTAC+GAMING+GeForce+RTX+3060+8GB+Twin+Edge" target="_blank" rel="noopener noreferrer">ZOTAC RTX 3060 Twin Edge · 8 GB GDDR6 <span>↗</span></a></dd><div class="part-preview" aria-hidden="true"><small>3584 CUDA · 1777 MHz</small><strong>GEFORCE RTX</strong><span>3060</span><i class="part-object part-object--gpu"></i></div></div>
+                <div class="hardware-row" data-part="motherboard"><dt>Placa-mãe</dt><dd><a href="https://www.google.com/search?q=MSI+PRO+B840M-B" target="_blank" rel="noopener noreferrer">MSI PRO B840M-B · AM5 · DDR5 · mATX <span>↗</span></a></dd><div class="part-preview" aria-hidden="true"><small>B840 · 2× M.2 PCIe 4.0</small><strong>MSI PRO</strong><span>B840M-B</span><i class="part-object part-object--board"></i></div></div>
+                <div class="hardware-row" data-part="ram"><dt>Memória RAM</dt><dd><a href="https://www.google.com/search?q=Kingston+FURY+Beast+KF556C40BB-16" target="_blank" rel="noopener noreferrer">Kingston FURY Beast · 16 GB (1×16) DDR5-5600 <span>↗</span></a></dd><div class="part-preview" aria-hidden="true"><small>5600 MT/s · CL40</small><strong>FURY BEAST</strong><span>16 GB</span><i class="part-object part-object--ram"></i></div></div>
+                <div class="hardware-row" data-part="cooler"><dt>Water cooler</dt><dd><a href="https://www.google.com/search?q=Kalkan+Aura+Digital+240mm+Preto+KLK00100" target="_blank" rel="noopener noreferrer">Kalkan Aura Digital · 240 mm · ARGB LCD <span>↗</span></a></dd><div class="part-preview" aria-hidden="true"><small>2× 120 mm · 2900 RPM</small><strong>AURA DIGITAL</strong><span>240</span><i class="part-object part-object--cooler"></i></div></div>
+                <div class="hardware-row" data-part="ssd"><dt>SSD</dt><dd><a href="https://www.google.com/search?q=ADATA+Legend+710+512GB" target="_blank" rel="noopener noreferrer">ADATA Legend 710 · 512 GB · NVMe PCIe 3.0 <span>↗</span></a></dd><div class="part-preview" aria-hidden="true"><small>2400 / 1600 MB/s</small><strong>LEGEND</strong><span>710</span><i class="part-object part-object--ssd"></i></div></div>
+                <div><dt>Monitor</dt><dd><a href="https://www.google.com/search?q=LG+UltraGear+24GS60F-B+24+IPS+180Hz" target="_blank" rel="noopener noreferrer">LG UltraGear 24GS60F-B · 24” IPS · 180 Hz <span>↗</span></a></dd></div>
+              </dl>
+            </article>
             <article class="setup-card peripherals reveal delay-1"><div class="setup-card-title"><span class="setup-symbol">✦</span><div><p>Meu espaço</p><h3>Periféricos</h3></div></div><dl><div><dt>Teclado</dt><dd><a href="https://www.google.com/search?q=Attack+Shark+X68HE" target="_blank" rel="noopener noreferrer">Attack Shark X68HE <span>↗</span></a></dd></div><div><dt>Mouse</dt><dd><a href="https://www.google.com/search?q=ATK+U2+Plus" target="_blank" rel="noopener noreferrer">ATK U2 Plus <span>↗</span></a></dd></div><div><dt>Microfone</dt><dd><a href="https://www.google.com/search?q=Fifine+Ampligame+A8" target="_blank" rel="noopener noreferrer">Fifine Ampligame A8 <span>↗</span></a></dd></div><div><dt>Headset</dt><dd><a href="https://www.google.com/search?q=Redragon+Zeus+Pro" target="_blank" rel="noopener noreferrer">Redragon Zeus Pro <span>↗</span></a></dd></div><div><dt>Controle</dt><dd><a href="https://www.google.com/search?q=Flydigi+Direwolf+2" target="_blank" rel="noopener noreferrer">Flydigi Direwolf 2 <span>↗</span></a></dd></div></dl></article>
           </div>
         </div>
@@ -116,7 +131,7 @@
     </main>
 
     <footer><div class="container footer-inner"><a class="brand" href="#topo" aria-label="Início de Yuuketts">Yuuketts<span>•</span></a><div class="footer-socials"><a href="https://www.youtube.com/@Yuuketts" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><img src="https://cdn.simpleicons.org/youtube/D8CFC0" alt="" /></a><a href="https://www.instagram.com/yuuketts.vlr/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="https://cdn.simpleicons.org/instagram/D8CFC0" alt="" /></a><a href="https://www.tiktok.com/@yuuketts.vlr" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><img src="https://cdn.simpleicons.org/tiktok/D8CFC0" alt="" /></a><a href="https://www.twitch.tv/yuuketts" target="_blank" rel="noopener noreferrer" aria-label="Twitch"><img src="https://cdn.simpleicons.org/twitch/D8CFC0" alt="" /></a><a href="https://discord.gg/FVC785BVWw" target="_blank" rel="noopener noreferrer" aria-label="Discord"><img src="https://cdn.simpleicons.org/discord/D8CFC0" alt="" /></a></div><small>© <span id="year"></span> Yuuketts. Todos os direitos reservados.</small></div></footer>
-    <script src="script.js?v=20261117-chokki5"></script>
-    <script type="module" src="scene-3d.js?v=20261117-chokki5"></script>
+    <script src="script.js?v=20261117-chokki8"></script>
+    <script type="module" src="scene-3d.js?v=20261117-chokki8"></script>
   </body>
 </html>

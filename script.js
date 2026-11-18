@@ -36,6 +36,7 @@ if (main && siteTopography) {
 const scrollProgress = document.querySelector('.scroll-progress span');
 const navSectionLinks = [...menu.querySelectorAll('a[href^="#"]')];
 const trackedSections = navSectionLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+const heroShell = document.querySelector('.hero-shell');
 const syncScrollUi = () => {
   header.classList.toggle('scrolled', scrollY > 18);
   const scrollable = document.documentElement.scrollHeight - innerHeight;
@@ -43,6 +44,29 @@ const syncScrollUi = () => {
   scrollProgress?.style.setProperty('--scroll-progress', progress);
   document.documentElement.style.setProperty('--scroll-light', (.06 + progress * .94).toFixed(3));
   document.documentElement.style.setProperty('--scroll-hue', String(Math.round(12 - progress * 18)));
+
+  if (heroShell) {
+    const travel = Math.max(1, heroShell.offsetHeight - innerHeight);
+    const introProgress = Math.min(1, Math.max(0, -heroShell.getBoundingClientRect().top / travel));
+    const compact = innerWidth <= 720;
+    heroShell.style.setProperty('--intro-progress', introProgress.toFixed(3));
+    heroShell.style.setProperty('--intro-copy-x', `${introProgress * (compact ? -3 : -5.5)}vw`);
+    heroShell.style.setProperty('--intro-copy-y', `${introProgress * (compact ? 3 : -2)}vh`);
+    heroShell.style.setProperty('--intro-copy-scale', (1 - introProgress * .035).toFixed(3));
+    heroShell.style.setProperty('--intro-copy-opacity', (1 - introProgress * (compact ? .28 : .3)).toFixed(3));
+    heroShell.style.setProperty('--intro-copy-blur', `${(introProgress * 1.5).toFixed(2)}px`);
+    heroShell.style.setProperty('--intro-visual-x', `${introProgress * (compact ? 2.5 : 4.5)}vw`);
+    heroShell.style.setProperty('--intro-visual-y', `${introProgress * (compact ? -4 : -1.5)}vh`);
+    heroShell.style.setProperty('--intro-visual-scale', (1 + introProgress * (compact ? .035 : .03)).toFixed(3));
+    heroShell.style.setProperty('--intro-star-rotate', `${(introProgress * 10).toFixed(2)}deg`);
+    heroShell.style.setProperty('--intro-star-scale', (1 + introProgress * .1).toFixed(3));
+    heroShell.style.setProperty('--intro-star-opacity', (1 - introProgress * .25).toFixed(3));
+    heroShell.style.setProperty('--intro-signature-x', `${(introProgress * 8).toFixed(1)}px`);
+    heroShell.style.setProperty('--intro-signature-y', `${(introProgress * -14).toFixed(1)}px`);
+    heroShell.style.setProperty('--intro-cue-y', `${(introProgress * 12).toFixed(1)}px`);
+    heroShell.style.setProperty('--intro-cue-opacity', Math.max(0, 1 - introProgress * 1.6).toFixed(3));
+    heroShell.classList.toggle('intro-open', introProgress > .76);
+  }
 
   const marker = scrollY + Math.min(innerHeight * .36, 330);
   let activeId = '';
