@@ -293,6 +293,103 @@ if (finePointer && !reducedMotion && cursorGlow) {
   bindCardTilt('.app-card', 2.4);
 }
 
+// Esfera wireframe 3D do hero. Canvas 2D com projecao em perspectiva: leve,
+// nitido em telas retina e sem uma biblioteca WebGL adicional.
+const hero3dCanvas = document.querySelector('[data-hero-3d]');
+if (hero3dCanvas && heroVisual) {
+  const hero3dContext = hero3dCanvas.getContext('2d');
+  const latitudeSteps = 11;
+  const longitudeSteps = 18;
+  const points = [];
+  const edges = [];
+
+  for (let latitude = 1; latitude < latitudeSteps; latitude += 1) {
+    const phi = Math.PI * latitude / latitudeSteps;
+    for (let longitude = 0; longitude < longitudeSteps; longitude += 1) {
+      const theta = Math.PI * 2 * longitude / longitudeSteps;
+      points.push({
+        x: Math.sin(phi) * Math.cos(theta),
+        y: Math.cos(phi),
+        z: Math.sin(phi) * Math.sin(theta)
+      });
+      const current = (latitude - 1) * longitudeSteps + longitude;
+      edges.push([current, (latitude - 1) * longitudeSteps + (longitude + 1) % longitudeSteps]);
+      if (latitude < latitudeSteps - 1) edges.push([current, current + longitudeSteps]);
+    }
+  }
+
+  let hero3dWidth = 0;
+  let hero3dHeight = 0;
+  let hero3dFrame = 0;
+  let hero3dPointerX = 0;
+  let hero3dPointerY = 0;
+  const resizeHero3d = () => {
+    const bounds = hero3dCanvas.getBoundingClientRect();
+    const ratio = Math.min(devicePixelRatio || 1, 2);
+    hero3dWidth = Math.max(1, bounds.width);
+    hero3dHeight = Math.max(1, bounds.height);
+    hero3dCanvas.width = Math.round(hero3dWidth * ratio);
+    hero3dCanvas.height = Math.round(hero3dHeight * ratio);
+    hero3dContext.setTransform(ratio, 0, 0, ratio, 0, 0);
+  };
+
+  const drawHero3d = time => {
+    hero3dContext.clearRect(0, 0, hero3dWidth, hero3dHeight);
+    const radius = Math.min(hero3dWidth, hero3dHeight) * .43;
+    const angleY = time * .00009 + hero3dPointerX * .28;
+    const angleX = -.16 + hero3dPointerY * .18;
+    const cosineY = Math.cos(angleY);
+    const sineY = Math.sin(angleY);
+    const cosineX = Math.cos(angleX);
+    const sineX = Math.sin(angleX);
+    const projected = points.map(point => {
+      const rotatedX = point.x * cosineY - point.z * sineY;
+      const rotatedZ = point.x * sineY + point.z * cosineY;
+      const rotatedY = point.y * cosineX - rotatedZ * sineX;
+      const depth = point.y * sineX + rotatedZ * cosineX;
+      const perspective = 2.8 / (3.45 - depth);
+      return {
+        x: hero3dWidth / 2 + rotatedX * radius * perspective,
+        y: hero3dHeight / 2 + rotatedY * radius * perspective,
+        depth
+      };
+    });
+
+    edges.forEach(([from, to]) => {
+      const start = projected[from];
+      const end = projected[to];
+      const depth = (start.depth + end.depth) / 2;
+      const opacity = .07 + (depth + 1) * .105;
+      hero3dContext.beginPath();
+      hero3dContext.moveTo(start.x, start.y);
+      hero3dContext.lineTo(end.x, end.y);
+      hero3dContext.strokeStyle = `rgba(255,249,246,${opacity})`;
+      hero3dContext.lineWidth = depth > .25 ? 1.15 : .72;
+      hero3dContext.stroke();
+    });
+
+    if (!reducedMotion) hero3dFrame = requestAnimationFrame(drawHero3d);
+  };
+
+  const hero3dResizeObserver = new ResizeObserver(resizeHero3d);
+  hero3dResizeObserver.observe(heroVisual);
+  heroVisual.addEventListener('pointermove', event => {
+    const bounds = heroVisual.getBoundingClientRect();
+    hero3dPointerX = (event.clientX - bounds.left) / bounds.width - .5;
+    hero3dPointerY = (event.clientY - bounds.top) / bounds.height - .5;
+    heroVisual.style.setProperty('--scene-rotate-x', `${hero3dPointerY * -3.5}deg`);
+    heroVisual.style.setProperty('--scene-rotate-y', `${hero3dPointerX * 4.5}deg`);
+  }, { passive: true });
+  heroVisual.addEventListener('pointerleave', () => {
+    hero3dPointerX = 0;
+    hero3dPointerY = 0;
+    heroVisual.style.setProperty('--scene-rotate-x', '0deg');
+    heroVisual.style.setProperty('--scene-rotate-y', '0deg');
+  });
+  resizeHero3d();
+  drawHero3d(performance.now());
+}
+
 // Curvas topográficas: desenhadas uma única vez em toda a página.
 // Assim, elas fazem parte do documento e acompanham o scroll sem atraso ou blocos de redesenho.
 const topoCanvas = document.querySelector('main > .topography-canvas');
