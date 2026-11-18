@@ -6,8 +6,8 @@ const hero = document.querySelector('.hero-visual');
 if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(31, 1, .1, 100);
-  camera.position.z = 7.2;
+  const camera = new THREE.PerspectiveCamera(29, 1, .1, 100);
+  camera.position.z = 11.2;
 
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -17,7 +17,7 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
   host.append(renderer.domElement);
 
   const world = new THREE.Group();
-  world.position.set(.04, -.05, 0);
+  world.position.set(.05, 0, 0);
   scene.add(world);
 
   const makeGlowTexture = () => {
@@ -25,9 +25,9 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
     canvas.width = canvas.height = 512;
     const context = canvas.getContext('2d');
     const gradient = context.createRadialGradient(256, 248, 18, 256, 256, 250);
-    gradient.addColorStop(0, 'rgba(255,235,222,.55)');
-    gradient.addColorStop(.48, 'rgba(124,71,58,.18)');
-    gradient.addColorStop(.76, 'rgba(65,36,31,.07)');
+    gradient.addColorStop(0, 'rgba(255,245,235,.72)');
+    gradient.addColorStop(.42, 'rgba(238,167,148,.2)');
+    gradient.addColorStop(.7, 'rgba(139,201,187,.13)');
     gradient.addColorStop(1, 'rgba(38,20,17,0)');
     context.fillStyle = gradient;
     context.fillRect(0, 0, 512, 512);
@@ -37,31 +37,31 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
   };
 
   const glow = new THREE.Mesh(
-    new THREE.PlaneGeometry(6.3, 4.7),
+    new THREE.PlaneGeometry(6.2, 6.2),
     new THREE.MeshBasicMaterial({ map: makeGlowTexture(), transparent: true, depthWrite: false, toneMapped: false })
   );
-  glow.position.set(.35, -.03, -.45);
+  glow.position.set(.15, 0, -.45);
   world.add(glow);
 
   const shadow = new THREE.Mesh(
-    new THREE.CircleGeometry(1.72, 96),
-    new THREE.MeshBasicMaterial({ color: 0x2b1714, transparent: true, opacity: .17, depthWrite: false })
+    new THREE.CircleGeometry(1.38, 96),
+    new THREE.MeshBasicMaterial({ color: 0x5f3a32, transparent: true, opacity: .13, depthWrite: false })
   );
-  shadow.scale.set(1.5, .22, 1);
-  shadow.position.set(.38, -1.72, -.28);
+  shadow.scale.set(1.35, .16, 1);
+  shadow.position.set(.12, -2.58, -.28);
   world.add(shadow);
 
   const character = new THREE.Group();
-  character.position.set(.24, -.12, .12);
+  character.position.set(.08, -.02, .12);
   world.add(character);
 
-  const textureUrl = new URL('assets/chokki-chocolate-hero.png', import.meta.url).href;
+  const textureUrl = new URL('assets/chokki-fullbody-v2.png', import.meta.url).href;
   new THREE.TextureLoader().load(textureUrl, texture => {
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
 
     const softDepth = new THREE.Mesh(
-      new THREE.PlaneGeometry(4.95, 3.3),
+      new THREE.PlaneGeometry(2.42, 5.64),
       new THREE.MeshBasicMaterial({
         map: texture,
         color: 0x3a211c,
@@ -76,7 +76,7 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
     character.add(softDepth);
 
     const artwork = new THREE.Mesh(
-      new THREE.PlaneGeometry(4.95, 3.3),
+      new THREE.PlaneGeometry(2.42, 5.64),
       new THREE.MeshBasicMaterial({
         map: texture,
         transparent: true,
@@ -116,7 +116,7 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
     const height = Math.max(1, bounds.height);
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
-    camera.position.z = innerWidth < 720 ? 8.25 : 7.2;
+    camera.position.z = innerWidth < 720 ? 12 : 11.2;
     camera.updateProjectionMatrix();
   };
   new ResizeObserver(resize).observe(host);
@@ -139,12 +139,12 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
     if (!sceneVisible || document.hidden) return;
 
     const elapsed = reducedMotion ? 0 : clock.getElapsedTime();
-    world.rotation.y += (pointerX * .13 - world.rotation.y) * .055;
-    world.rotation.x += (pointerY * .075 - world.rotation.x) * .055;
-    character.position.y = -.12 + Math.sin(elapsed * .72) * .035;
+    world.rotation.y += (pointerX * .11 - world.rotation.y) * .055;
+    world.rotation.x += (pointerY * .055 - world.rotation.x) * .055;
+    character.position.y = -.02 + Math.sin(elapsed * .72) * .035;
     character.rotation.z = Math.sin(elapsed * .38) * .006;
-    shadow.scale.x = 1.5 + Math.sin(elapsed * .72) * .035;
-    shadow.material.opacity = .16 + Math.sin(elapsed * .72) * .012;
+    shadow.scale.x = 1.35 + Math.sin(elapsed * .72) * .028;
+    shadow.material.opacity = .12 + Math.sin(elapsed * .72) * .01;
     glow.material.opacity = .88 + scrollProgress * .12;
     renderer.toneMappingExposure = 1.01 + scrollProgress * .08;
 

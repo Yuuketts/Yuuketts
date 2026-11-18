@@ -83,35 +83,17 @@ document.querySelectorAll('.brand[href="#topo"]').forEach(brand => brand.addEven
   history.replaceState(null, '', '#topo');
 }));
 
-const pageTransition = document.querySelector('.page-transition');
-const pageTransitionLabel = document.querySelector('[data-transition-label]');
-let transitionTimer;
 const navigateWithTransition = (selector, sourcePoint = {}) => {
   const destination = document.querySelector(selector);
   if (!destination) return;
-  const label = destination.querySelector('h2')?.textContent?.trim() || 'Yuuketts';
-  const x = Number.isFinite(sourcePoint.clientX) ? sourcePoint.clientX : innerWidth / 2;
-  const y = Number.isFinite(sourcePoint.clientY) ? sourcePoint.clientY : innerHeight / 2;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !pageTransition) {
-    destination.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    history.pushState(null, '', selector);
-    return;
-  }
-  clearTimeout(transitionTimer);
-  pageTransition.style.setProperty('--transition-x', `${x}px`);
-  pageTransition.style.setProperty('--transition-y', `${y}px`);
-  pageTransitionLabel.textContent = label;
-  document.body.classList.remove('site-transition-reveal');
-  document.body.classList.add('site-transitioning');
-  setTimeout(() => {
-    destination.scrollIntoView({ behavior: 'auto', block: 'start' });
-    history.pushState(null, '', selector);
-    syncScrollUi();
-  }, 470);
-  setTimeout(() => document.body.classList.add('site-transition-reveal'), 650);
-  transitionTimer = setTimeout(() => {
-    document.body.classList.remove('site-transitioning', 'site-transition-reveal');
-  }, 1340);
+  destination.scrollIntoView({
+    behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    block: 'start'
+  });
+  history.pushState(null, '', selector);
+  destination.classList.remove('section-arrival');
+  requestAnimationFrame(() => destination.classList.add('section-arrival'));
+  setTimeout(() => destination.classList.remove('section-arrival'), 900);
 };
 window.navigateWithTransition = navigateWithTransition;
 
