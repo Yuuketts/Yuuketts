@@ -104,10 +104,7 @@ const syncScrollUi = () => {
     const bounds = section.getBoundingClientRect();
     const distance = (bounds.top + bounds.height * .5 - innerHeight * .5) / innerHeight;
     const clamped = Math.max(-1, Math.min(1, distance));
-    const presence = Math.max(0, 1 - Math.abs(clamped) * .56);
-    section.style.setProperty('--panel-shift', `${(clamped * 18).toFixed(1)}px`);
-    section.style.setProperty('--panel-scale', (0.976 + presence * .024).toFixed(4));
-    section.style.setProperty('--panel-opacity', (0.74 + presence * .26).toFixed(3));
+    section.style.setProperty('--panel-shift', `${(clamped * 8).toFixed(1)}px`);
   });
   navSectionLinks.forEach(link => {
     const active = link.getAttribute('href') === `#${activeId}`;
@@ -150,9 +147,6 @@ const navigateWithTransition = (selector, sourcePoint = {}) => {
     block: 'start'
   });
   history.pushState(null, '', selector);
-  destination.classList.remove('section-arrival');
-  requestAnimationFrame(() => destination.classList.add('section-arrival'));
-  setTimeout(() => destination.classList.remove('section-arrival'), 900);
 };
 window.navigateWithTransition = navigateWithTransition;
 
@@ -222,34 +216,12 @@ document.querySelectorAll('[data-social-tabs]').forEach(tabGroup => {
 const observer = new IntersectionObserver(entries => entries.forEach(entry => {
   if (entry.isIntersecting) {
     entry.target.classList.add('visible');
-  } else {
-    entry.target.classList.remove('visible');
-    entry.target.classList.toggle('exit-up', entry.boundingClientRect.bottom <= 0);
+    entry.target.classList.remove('exit-up');
+    observer.unobserve(entry.target);
   }
 }), { threshold: .12 });
 const revealElements = [...document.querySelectorAll('.reveal')];
 revealElements.forEach(el => observer.observe(el));
-
-// Fallback leve para navegadores que atrasam o Intersection Observer perto do fim da página.
-let revealFrame;
-const syncReveals = () => {
-  revealFrame = null;
-  revealElements.forEach(el => {
-    const bounds = el.getBoundingClientRect();
-    const inView = bounds.top < innerHeight * .88 && bounds.bottom > innerHeight * .12;
-    if (inView) el.classList.add('visible');
-    else {
-      el.classList.remove('visible');
-      el.classList.toggle('exit-up', bounds.bottom <= 0);
-    }
-  });
-};
-const queueRevealSync = () => {
-  if (!revealFrame) revealFrame = requestAnimationFrame(syncReveals);
-};
-addEventListener('scroll', queueRevealSync, { passive: true });
-addEventListener('resize', queueRevealSync, { passive: true });
-queueRevealSync();
 
 document.querySelector('#year').textContent = new Date().getFullYear();
 // A contagem é consultada pela função segura da Vercel; a chave não fica exposta no navegador.

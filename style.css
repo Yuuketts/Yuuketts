@@ -388,3 +388,10 @@ body .apps .app-dock{border-color:rgba(255,255,255,.1);background:linear-gradien
 footer{background:linear-gradient(180deg,#0d0908,#070504)!important;color:#bca9a0!important;border-top:1px solid rgba(255,255,255,.08)}footer .brand{color:#f7eee9}footer .footer-socials a{border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.035)}footer .footer-inner small{color:#8f7d75!important;border-color:rgba(255,255,255,.08)}
 
 @media(max-width:720px){.play-video{width:58px;height:58px}.role-marquee:before,.role-marquee:after{width:28px!important}}
+
+/* Rolagem contínua: entradas acontecem uma vez, sem reaparecer ou piscar. */
+.section{opacity:1!important;transform:translateY(var(--panel-shift,0))!important;transition:transform .42s cubic-bezier(.22,.8,.2,1),border-color .55s ease!important;will-change:transform}
+.reveal{transition-duration:.72s!important;transition-timing-function:cubic-bezier(.16,1,.3,1)!important}
+.reveal.visible{opacity:1;filter:blur(0);transform:none}
+.section-arrival .section-intro,.section-arrival .about-heading,.section-arrival .video-copy,.section-arrival .setup-heading,.section-arrival .apps-heading,.section-arrival .support-box{animation:none!important}
+@media(max-width:720px){.section{transform:translateY(calc(var(--panel-shift,0) * .35))!important}}
