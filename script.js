@@ -153,6 +153,26 @@ document.querySelectorAll('a[href^="#"]:not(.brand)').forEach(link => link.addEv
   navigateWithTransition(selector, event);
 }));
 
+// Os previews também podem ser abertos por clique/toque e teclado, sem sair da página.
+const hardwareRows = [...document.querySelectorAll('.hardware-row')];
+const togglePartPreview = row => {
+  const willOpen = !row.classList.contains('preview-open');
+  hardwareRows.forEach(item => item.classList.remove('preview-open'));
+  row.classList.toggle('preview-open', willOpen);
+};
+hardwareRows.forEach(row => {
+  row.tabIndex = 0;
+  row.addEventListener('click', event => {
+    if (event.target.closest('a')) return;
+    togglePartPreview(row);
+  });
+  row.addEventListener('keydown', event => {
+    if (!['Enter', ' '].includes(event.key)) return;
+    event.preventDefault();
+    togglePartPreview(row);
+  });
+});
+
 // A grade de redes entra como um conjunto, no mesmo ritmo do setup.
 const socialGrid = document.querySelector('#redes .social-grid');
 if (socialGrid) {

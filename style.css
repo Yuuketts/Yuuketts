@@ -285,3 +285,28 @@ body.intro-active{overflow:hidden}
   .site-intro,.site-intro__character,.site-intro__copy{transition-duration:.01ms!important}
   .site-intro__star,.site-intro__enter i{animation:none}
 }
+
+/* Galeria do setup: todos os produtos usam o mesmo quadro e abrem dentro do card. */
+.setup .container{width:min(1180px,calc(100% - 40px))}
+.setup-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.setup-card{overflow:hidden}
+.setup-card dl .hardware-row{z-index:auto;grid-template-columns:132px minmax(0,1fr);column-gap:20px;align-items:start}
+.setup-card dl .part-preview,.peripherals dl .part-preview{position:relative;z-index:1;left:auto;right:auto;top:auto;bottom:auto;grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) 154px;grid-template-rows:auto 1fr;gap:5px 18px;width:100%;height:auto;max-height:0;margin:0;padding:0 16px;border:0 solid rgba(255,255,255,.74);border-radius:22px;background:linear-gradient(145deg,rgba(255,250,246,.97),rgba(225,242,236,.94));box-shadow:none;opacity:0;pointer-events:none;overflow:hidden;transform:translateY(8px);transform-origin:center;transition:max-height .42s cubic-bezier(.16,1,.3,1),margin .42s cubic-bezier(.16,1,.3,1),padding .42s cubic-bezier(.16,1,.3,1),opacity .22s ease,transform .42s cubic-bezier(.16,1,.3,1),border-width .2s ease}
+.setup-card dl .hardware-row:hover .part-preview,.setup-card dl .hardware-row:focus-within .part-preview,.setup-card dl .hardware-row.preview-open .part-preview,.peripherals dl .hardware-row:hover .part-preview,.peripherals dl .hardware-row:focus-within .part-preview,.peripherals dl .hardware-row.preview-open .part-preview{max-height:190px;margin-top:14px;padding:14px 16px;opacity:1;border-width:1px;transform:none}
+.part-preview small{grid-column:1;align-self:end;margin-top:8px;font-size:9px;letter-spacing:1px}
+.part-preview strong{grid-column:1;align-self:start;margin:0;font-size:14px;line-height:1.25;letter-spacing:.35px}
+.part-preview--photo img{position:relative;z-index:2;grid-column:2;grid-row:1/3;align-self:center;right:auto;bottom:auto;width:154px;height:154px;padding:10px;border:1px solid rgba(74,48,41,.09);border-radius:17px;background:#fff;object-fit:contain;mix-blend-mode:multiply;filter:drop-shadow(0 9px 9px rgba(46,27,23,.13));transform:none;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.hardware-row:hover .part-preview--photo img,.hardware-row:focus-within .part-preview--photo img,.hardware-row.preview-open .part-preview--photo img{transform:translateY(-2px) scale(1.025)}
+
+@media(max-width:900px){
+  .setup-grid{grid-template-columns:1fr}
+  .setup-card dl .hardware-row{grid-template-columns:150px minmax(0,1fr)}
+}
+@media(max-width:560px){
+  .setup .container{width:min(100% - 24px,1180px)}
+  .setup-card dl .hardware-row{grid-template-columns:1fr;gap:4px}
+  .setup-card dl .part-preview,.peripherals dl .part-preview{grid-template-columns:minmax(0,1fr) 118px;gap:4px 12px}
+  .setup-card dl .hardware-row:hover .part-preview,.setup-card dl .hardware-row:focus-within .part-preview,.setup-card dl .hardware-row.preview-open .part-preview,.peripherals dl .hardware-row:hover .part-preview,.peripherals dl .hardware-row:focus-within .part-preview,.peripherals dl .hardware-row.preview-open .part-preview{max-height:154px;padding:12px}
+  .part-preview--photo img{width:118px;height:118px;padding:8px;border-radius:14px}
+  .part-preview strong{font-size:12px}
+}
