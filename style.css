@@ -90,3 +90,42 @@ main>.hero,main>.section{transition:filter .55s ease,transform .7s cubic-bezier(
 .section.is-scene-active .section-intro,.section.is-scene-active .setup-heading,.section.is-scene-active .apps-heading{transform:translateZ(0)}
 @media(max-width:720px){.hero-webgl{inset:-4% -8%}.scene-tooltip{display:none}body.webgl-ready .hero-visual:after{opacity:0}}
 @media(prefers-reduced-motion:reduce){.scroll-lighting{transition:none;transform:none}.page-transition{display:none}.hero-webgl{transition:none}main>.hero,main>.section{transition:none;filter:none!important}}
+
+/* Identidade Yuuki + Chokki: chocolate, creme e movimento 3D sem ornamentos soltos. */
+:root{
+  --bg:#805548;
+  --surface:#ead8cb;
+  --surface-light:#f6e9df;
+  --ink:#291815;
+  --muted:#6f5149;
+  --white:#fff8f2;
+  --line:rgba(65,36,31,.15);
+  --shadow:0 18px 50px rgba(48,25,21,.17)
+}
+.site-header.scrolled{background:rgba(234,216,203,.9)}
+.hero{gap:34px}
+.hero-description{color:#3b2420}.hero-description strong{color:var(--ink);font-weight:700}
+.role-marquee{background:#2c1916!important;color:#ead8cb!important}
+.support-box{background:#ad705d}.support-box p:not(.eyebrow){color:#3c241f}
+.peripherals{background:#c3907d}
+.scroll-progress span{background:linear-gradient(90deg,#3d211c,#9e624f,#efb8a6)}
+.scroll-lighting{background:radial-gradient(circle at 72% 18%,rgba(255,228,210,.72),transparent 32%),radial-gradient(circle at 20% 68%,rgba(75,39,32,.34),transparent 40%),linear-gradient(180deg,rgba(36,18,16,.2),transparent 44%,rgba(255,238,225,.15));filter:none;mix-blend-mode:soft-light}
+
+.hero-visual{height:540px;isolation:isolate;overflow:visible}
+.hero-visual:before{content:"";position:absolute;z-index:-1;width:84%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(246,218,201,.24),rgba(62,32,27,.08) 58%,transparent 72%);filter:blur(5px);pointer-events:none}
+.hero-webgl{z-index:2;inset:-7% -14%;cursor:default;touch-action:pan-y}
+.hero-webgl:active{cursor:default}
+.hero-fallback{position:absolute;z-index:1;width:112%;height:112%;object-fit:contain;object-position:center;filter:drop-shadow(0 30px 28px rgba(45,24,20,.18));transition:opacity .45s ease;pointer-events:none}
+body.webgl-ready .hero-fallback{opacity:0}
+.character-signature{position:absolute;z-index:5;right:2%;bottom:3%;display:grid;gap:1px;padding:9px 13px;border:1px solid rgba(255,248,242,.38);border-radius:13px;background:rgba(54,29,25,.68);color:#fff8f2;box-shadow:0 12px 28px rgba(46,23,19,.14);backdrop-filter:blur(12px);pointer-events:none}
+.character-signature strong{font:600 17px/1 "Playfair Display",serif;letter-spacing:-.02em}
+.character-signature span{font-size:8px;font-weight:700;letter-spacing:1.15px;text-transform:uppercase;opacity:.72}
+
+@media(max-width:720px){
+  .hero{gap:18px}
+  .hero-visual{height:370px}
+  .hero-webgl{inset:-5% -18%}
+  .hero-fallback{width:120%;height:120%}
+  .character-signature{right:0;bottom:1%;padding:8px 11px}
+  .character-signature strong{font-size:15px}
+}
