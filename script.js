@@ -85,6 +85,7 @@ if (main && siteTopography) {
 const scrollProgress = document.querySelector('.scroll-progress span');
 const navSectionLinks = [...menu.querySelectorAll('a[href^="#"]')];
 const trackedSections = navSectionLinks.map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+const motionPanels = [...document.querySelectorAll('.section')];
 const syncScrollUi = () => {
   header.classList.toggle('scrolled', scrollY > 18);
   const scrollable = document.documentElement.scrollHeight - innerHeight;
@@ -99,6 +100,15 @@ const syncScrollUi = () => {
     if (section.offsetTop <= marker) activeId = section.id;
   });
   trackedSections.forEach(section => section.classList.toggle('is-scene-active', section.id === activeId));
+  motionPanels.forEach(section => {
+    const bounds = section.getBoundingClientRect();
+    const distance = (bounds.top + bounds.height * .5 - innerHeight * .5) / innerHeight;
+    const clamped = Math.max(-1, Math.min(1, distance));
+    const presence = Math.max(0, 1 - Math.abs(clamped) * .56);
+    section.style.setProperty('--panel-shift', `${(clamped * 18).toFixed(1)}px`);
+    section.style.setProperty('--panel-scale', (0.976 + presence * .024).toFixed(4));
+    section.style.setProperty('--panel-opacity', (0.74 + presence * .26).toFixed(3));
+  });
   navSectionLinks.forEach(link => {
     const active = link.getAttribute('href') === `#${activeId}`;
     link.classList.toggle('is-active', active);
