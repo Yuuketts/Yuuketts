@@ -41,12 +41,15 @@ const syncScrollUi = () => {
   const scrollable = document.documentElement.scrollHeight - innerHeight;
   const progress = scrollable > 0 ? Math.min(1, Math.max(0, scrollY / scrollable)) : 0;
   scrollProgress?.style.setProperty('--scroll-progress', progress);
+  document.documentElement.style.setProperty('--scroll-light', (.06 + progress * .94).toFixed(3));
+  document.documentElement.style.setProperty('--scroll-hue', String(Math.round(12 - progress * 18)));
 
   const marker = scrollY + Math.min(innerHeight * .36, 330);
   let activeId = '';
   trackedSections.forEach(section => {
     if (section.offsetTop <= marker) activeId = section.id;
   });
+  trackedSections.forEach(section => section.classList.toggle('is-scene-active', section.id === activeId));
   navSectionLinks.forEach(link => {
     const active = link.getAttribute('href') === `#${activeId}`;
     link.classList.toggle('is-active', active);
@@ -78,6 +81,45 @@ document.querySelectorAll('.brand[href="#topo"]').forEach(brand => brand.addEven
   document.body.style.overflow = '';
   scrollTo({ top: 0, behavior: 'smooth' });
   history.replaceState(null, '', '#topo');
+}));
+
+const pageTransition = document.querySelector('.page-transition');
+const pageTransitionLabel = document.querySelector('[data-transition-label]');
+let transitionTimer;
+const navigateWithTransition = (selector, sourcePoint = {}) => {
+  const destination = document.querySelector(selector);
+  if (!destination) return;
+  const label = destination.querySelector('h2')?.textContent?.trim() || 'Yuuketts';
+  const x = Number.isFinite(sourcePoint.clientX) ? sourcePoint.clientX : innerWidth / 2;
+  const y = Number.isFinite(sourcePoint.clientY) ? sourcePoint.clientY : innerHeight / 2;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !pageTransition) {
+    destination.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.pushState(null, '', selector);
+    return;
+  }
+  clearTimeout(transitionTimer);
+  pageTransition.style.setProperty('--transition-x', `${x}px`);
+  pageTransition.style.setProperty('--transition-y', `${y}px`);
+  pageTransitionLabel.textContent = label;
+  document.body.classList.remove('site-transition-reveal');
+  document.body.classList.add('site-transitioning');
+  setTimeout(() => {
+    destination.scrollIntoView({ behavior: 'auto', block: 'start' });
+    history.pushState(null, '', selector);
+    syncScrollUi();
+  }, 470);
+  setTimeout(() => document.body.classList.add('site-transition-reveal'), 650);
+  transitionTimer = setTimeout(() => {
+    document.body.classList.remove('site-transitioning', 'site-transition-reveal');
+  }, 1340);
+};
+window.navigateWithTransition = navigateWithTransition;
+
+document.querySelectorAll('a[href^="#"]:not(.brand)').forEach(link => link.addEventListener('click', event => {
+  const selector = link.getAttribute('href');
+  if (!selector || selector === '#') return;
+  event.preventDefault();
+  navigateWithTransition(selector, event);
 }));
 
 // A grade de redes entra como um conjunto, no mesmo ritmo do setup.
