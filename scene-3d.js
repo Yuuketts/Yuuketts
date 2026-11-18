@@ -7,196 +7,196 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(34, 1, .1, 100);
-  camera.position.set(0, 0, 9.2);
+  camera.position.set(0, 0, 8.7);
 
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.08;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMappingExposure = 1.04;
   host.append(renderer.domElement);
 
   const world = new THREE.Group();
-  world.rotation.x = -.06;
+  world.position.y = -.03;
   scene.add(world);
+  scene.add(new THREE.HemisphereLight(0xffe9df, 0x342522, 1.45));
 
-  const ambient = new THREE.HemisphereLight(0xffeee5, 0x2a1715, 1.55);
-  scene.add(ambient);
-  const keyLight = new THREE.SpotLight(0xffd8c6, 34, 22, Math.PI * .24, .48, 1.2);
-  keyLight.position.set(4.5, 5.5, 7);
-  keyLight.castShadow = true;
-  scene.add(keyLight);
-  scene.add(keyLight.target);
-  const rimLight = new THREE.PointLight(0xd77968, 24, 18, 1.4);
-  rimLight.position.set(-4.5, .2, 4.5);
-  scene.add(rimLight);
+  const coralLight = new THREE.PointLight(0xff9d91, 20, 16, 1.5);
+  coralLight.position.set(3.4, 3.5, 5);
+  scene.add(coralLight);
+  const mintLight = new THREE.PointLight(0x83c8b9, 12, 14, 1.5);
+  mintLight.position.set(-3.8, -.5, 4);
+  scene.add(mintLight);
 
-  const roundedRectangle = (width, height, radius) => {
-    const x = -width / 2;
-    const y = -height / 2;
-    const shape = new THREE.Shape();
-    shape.moveTo(x + radius, y);
-    shape.lineTo(x + width - radius, y);
-    shape.quadraticCurveTo(x + width, y, x + width, y + radius);
-    shape.lineTo(x + width, y + height - radius);
-    shape.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-    shape.lineTo(x + radius, y + height);
-    shape.quadraticCurveTo(x, y + height, x, y + height - radius);
-    shape.lineTo(x, y + radius);
-    shape.quadraticCurveTo(x, y, x + radius, y);
-    return shape;
-  };
-
-  const portrait = new THREE.Group();
-  portrait.position.y = .05;
-  world.add(portrait);
-
-  const frameGeometry = new THREE.ExtrudeGeometry(roundedRectangle(3.45, 4.25, .34), {
-    depth: .34,
-    bevelEnabled: true,
-    bevelSegments: 6,
-    steps: 1,
-    bevelSize: .1,
-    bevelThickness: .1,
-    curveSegments: 12
-  });
-  frameGeometry.translate(0, 0, -.17);
-  const frame = new THREE.Mesh(frameGeometry, new THREE.MeshPhysicalMaterial({
-    color: 0x7d3f35,
-    metalness: .18,
-    roughness: .28,
-    clearcoat: .95,
-    clearcoatRoughness: .2
-  }));
-  frame.castShadow = true;
-  frame.receiveShadow = true;
-  portrait.add(frame);
-
-  const innerPlate = new THREE.Mesh(
-    new THREE.PlaneGeometry(3.12, 3.92, 24, 24),
-    new THREE.MeshPhysicalMaterial({ color: 0xb97865, roughness: .38, metalness: .04 })
-  );
-  innerPlate.position.z = .285;
-  portrait.add(innerPlate);
-
-  const glass = new THREE.Mesh(
-    new THREE.PlaneGeometry(3.22, 4.02),
-    new THREE.MeshPhysicalMaterial({
-      color: 0xffeee8,
-      transparent: true,
-      opacity: .13,
-      roughness: .08,
-      metalness: .04,
-      transmission: .18,
-      clearcoat: 1
-    })
-  );
-  glass.position.z = .37;
-  glass.material.depthWrite = false;
-  glass.renderOrder = 6;
-  portrait.add(glass);
-
-  const aura = new THREE.Mesh(
-    new THREE.TorusGeometry(2.72, .025, 12, 180),
-    new THREE.MeshStandardMaterial({ color: 0xffd8c8, emissive: 0xa94f42, emissiveIntensity: 1.1, metalness: .6, roughness: .2 })
-  );
-  aura.position.z = -.38;
-  aura.rotation.x = .12;
-  world.add(aura);
-  const auraSecond = aura.clone();
-  auraSecond.scale.set(.78, .78, .78);
-  auraSecond.rotation.set(.5, .35, -.3);
-  auraSecond.material = aura.material.clone();
-  auraSecond.material.opacity = .62;
-  auraSecond.material.transparent = true;
-  world.add(auraSecond);
-
-  const particleCount = 110;
-  const particlePositions = new Float32Array(particleCount * 3);
-  for (let index = 0; index < particleCount; index += 1) {
-    const radius = 2.5 + Math.random() * 3.2;
-    const angle = Math.random() * Math.PI * 2;
-    particlePositions[index * 3] = Math.cos(angle) * radius;
-    particlePositions[index * 3 + 1] = (Math.random() - .5) * 6.6;
-    particlePositions[index * 3 + 2] = (Math.random() - .5) * 3.8 - .7;
-  }
-  const particleGeometry = new THREE.BufferGeometry();
-  particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-  const particles = new THREE.Points(particleGeometry, new THREE.PointsMaterial({ color: 0xffe1d4, size: .035, transparent: true, opacity: .72 }));
-  world.add(particles);
-
-  const createLabelTexture = label => {
+  const createGlowTexture = () => {
     const canvas = document.createElement('canvas');
-    canvas.width = 640;
-    canvas.height = 210;
+    canvas.width = canvas.height = 512;
     const context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = 'rgba(35,24,22,.94)';
-    context.beginPath();
-    context.roundRect(8, 8, 624, 194, 52);
-    context.fill();
-    context.strokeStyle = 'rgba(255,235,225,.5)';
-    context.lineWidth = 4;
-    context.stroke();
-    context.fillStyle = '#fff7f2';
-    context.font = '700 50px DM Sans, Arial, sans-serif';
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    context.fillText(`${label}  ↗`, 320, 106);
+    const gradient = context.createRadialGradient(256, 246, 18, 256, 256, 244);
+    gradient.addColorStop(0, 'rgba(255,238,229,.58)');
+    gradient.addColorStop(.46, 'rgba(242,151,137,.18)');
+    gradient.addColorStop(.72, 'rgba(128,196,181,.08)');
+    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, 512, 512);
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
-    texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
     return texture;
   };
 
+  const glow = new THREE.Mesh(
+    new THREE.PlaneGeometry(5.7, 5.7),
+    new THREE.MeshBasicMaterial({ map: createGlowTexture(), transparent: true, depthWrite: false, toneMapped: false })
+  );
+  glow.position.z = -.55;
+  world.add(glow);
+
+  const coralRing = new THREE.Mesh(
+    new THREE.TorusGeometry(2.36, .018, 10, 180),
+    new THREE.MeshBasicMaterial({ color: 0xffb1a6, transparent: true, opacity: .72, depthWrite: false })
+  );
+  coralRing.position.z = -.32;
+  coralRing.rotation.set(.12, -.1, .12);
+  world.add(coralRing);
+
+  const mintRing = new THREE.Mesh(
+    new THREE.TorusGeometry(2.02, .012, 10, 180),
+    new THREE.MeshBasicMaterial({ color: 0x8ecabc, transparent: true, opacity: .35, depthWrite: false })
+  );
+  mintRing.position.z = -.38;
+  mintRing.rotation.set(-.28, .28, -.35);
+  world.add(mintRing);
+
+  const character = new THREE.Group();
+  character.position.set(.08, -.06, .12);
+  world.add(character);
+
+  const particleCount = 64;
+  const particlePositions = new Float32Array(particleCount * 3);
+  for (let index = 0; index < particleCount; index += 1) {
+    const radius = 2.25 + Math.random() * 1.25;
+    const angle = Math.random() * Math.PI * 2;
+    particlePositions[index * 3] = Math.cos(angle) * radius;
+    particlePositions[index * 3 + 1] = Math.sin(angle) * radius * .88;
+    particlePositions[index * 3 + 2] = -.2 + Math.random() * .8;
+  }
+  const particleGeometry = new THREE.BufferGeometry();
+  particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+  const particles = new THREE.Points(
+    particleGeometry,
+    new THREE.PointsMaterial({ color: 0xffe5dc, size: .026, transparent: true, opacity: .58, depthWrite: false })
+  );
+  world.add(particles);
+
+  const createIconTexture = type => {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 256;
+    const context = canvas.getContext('2d');
+    context.strokeStyle = '#3b2927';
+    context.fillStyle = '#3b2927';
+    context.lineWidth = 16;
+    context.lineCap = 'round';
+    context.lineJoin = 'round';
+    if (type === 'play') {
+      context.beginPath();
+      context.moveTo(103, 76);
+      context.lineTo(178, 128);
+      context.lineTo(103, 180);
+      context.closePath();
+      context.fill();
+    } else if (type === 'setup') {
+      context.strokeRect(69, 71, 118, 82);
+      context.beginPath();
+      context.moveTo(102, 184);
+      context.lineTo(154, 184);
+      context.moveTo(128, 153);
+      context.lineTo(128, 184);
+      context.stroke();
+    } else {
+      [[87, 92], [169, 92], [128, 170]].forEach(([x, y]) => {
+        context.beginPath();
+        context.arc(x, y, 20, 0, Math.PI * 2);
+        context.fill();
+      });
+      context.beginPath();
+      context.moveTo(103, 105);
+      context.lineTo(118, 151);
+      context.moveTo(153, 105);
+      context.lineTo(138, 151);
+      context.moveTo(108, 92);
+      context.lineTo(148, 92);
+      context.stroke();
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  };
+
+  const portalData = [
+    { label: 'Vídeos', type: 'play', target: '#video', color: 0xf4a297, position: [-1.72, 1.05, .72] },
+    { label: 'Setup', type: 'setup', target: '#setup', color: 0xf7dfd5, position: [1.78, .15, .78] },
+    { label: 'Redes', type: 'social', target: '#redes', color: 0x86c5b7, position: [-1.45, -1.48, .68] }
+  ];
   const portals = [];
   const clickableMeshes = [];
-  const portalData = [
-    { label: 'VÍDEOS', target: '#video', position: [-1.95, .92, .45], rotation: -.13 },
-    { label: 'SETUP', target: '#setup', position: [1.98, .3, .72], rotation: .1 },
-    { label: 'REDES', target: '#redes', position: [-1.82, -1.62, .62], rotation: -.08 }
-  ];
   portalData.forEach((data, index) => {
     const portal = new THREE.Group();
-    const body = new THREE.Mesh(
-      new THREE.BoxGeometry(1.55, .5, .16, 3, 2, 2),
-      new THREE.MeshPhysicalMaterial({ color: 0x2b1d1b, metalness: .32, roughness: .22, clearcoat: .86 })
+    const orb = new THREE.Mesh(
+      new THREE.SphereGeometry(.25, 32, 24),
+      new THREE.MeshPhysicalMaterial({ color: data.color, roughness: .24, metalness: .04, clearcoat: 1, clearcoatRoughness: .16 })
     );
-    body.castShadow = true;
-    const face = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.5, .47),
-      new THREE.MeshBasicMaterial({ map: createLabelTexture(data.label), transparent: true, toneMapped: false })
+    const icon = new THREE.Mesh(
+      new THREE.PlaneGeometry(.28, .28),
+      new THREE.MeshBasicMaterial({ map: createIconTexture(data.type), transparent: true, depthWrite: false, toneMapped: false })
     );
-    face.position.z = .086;
-    portal.add(body, face);
+    icon.position.z = .245;
+    portal.add(orb, icon);
     portal.position.set(...data.position);
-    portal.rotation.z = data.rotation;
-    portal.userData = { target: data.target, baseY: data.position[1], phase: index * 1.7 };
-    body.userData.portal = portal;
-    face.userData.portal = portal;
-    clickableMeshes.push(body, face);
+    portal.userData = { ...data, baseY: data.position[1], phase: index * 1.9 };
+    orb.userData.portal = portal;
+    icon.userData.portal = portal;
+    clickableMeshes.push(orb, icon);
     portals.push(portal);
     world.add(portal);
   });
+
+  const tooltip = document.createElement('div');
+  tooltip.className = 'scene-tooltip';
+  hero.append(tooltip);
 
   const loader = new THREE.TextureLoader();
   const portraitUrl = new URL('assets/yuuketts-aussie-hero.png', import.meta.url).href;
   loader.load(portraitUrl, texture => {
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    for (let layerIndex = 3; layerIndex >= 1; layerIndex -= 1) {
+      const depthLayer = new THREE.Mesh(
+        new THREE.PlaneGeometry(3.48, 4.35),
+        new THREE.MeshBasicMaterial({
+          map: texture,
+          color: 0x65443d,
+          transparent: true,
+          opacity: .035,
+          alphaTest: .02,
+          depthTest: false,
+          depthWrite: false,
+          toneMapped: false
+        })
+      );
+      depthLayer.position.set(0, 0, -layerIndex * .018);
+      depthLayer.renderOrder = 10 - layerIndex;
+      character.add(depthLayer);
+    }
     const image = new THREE.Mesh(
-      new THREE.PlaneGeometry(3.08, 3.84),
-      new THREE.MeshBasicMaterial({ map: texture, transparent: true, alphaTest: .015, toneMapped: false, depthTest: false, depthWrite: false })
+      new THREE.PlaneGeometry(3.48, 4.35),
+      new THREE.MeshBasicMaterial({ map: texture, transparent: true, alphaTest: .02, depthTest: false, depthWrite: false, toneMapped: false })
     );
-    image.position.set(0, -.08, .32);
-    image.renderOrder = 5;
-    portrait.add(image);
-    glass.position.z = .4;
+    image.position.z = .035;
+    image.renderOrder = 20;
+    character.add(image);
     document.body.classList.add('webgl-ready');
   }, undefined, () => {
-    console.warn('A textura do retrato 3D não pôde ser carregada; mantendo o visual alternativo.');
+    console.warn('A textura do Chokki não pôde ser carregada; mantendo o visual alternativo.');
   });
 
   let pointerX = 0;
@@ -213,13 +213,16 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
     pointerX = pointer.x;
     pointerY = pointer.y;
     raycaster.setFromCamera(pointer, camera);
-    const hovered = raycaster.intersectObjects(clickableMeshes, false)[0];
-    host.style.cursor = hovered ? 'pointer' : (pointerDown ? 'grabbing' : 'grab');
-    portals.forEach(portal => {
-      const active = hovered?.object?.userData?.portal === portal;
-      portal.scale.setScalar(active ? 1.1 : 1);
-    });
+    const hoveredPortal = raycaster.intersectObjects(clickableMeshes, false)[0]?.object?.userData?.portal;
+    host.style.cursor = hoveredPortal ? 'pointer' : (pointerDown ? 'grabbing' : 'grab');
+    portals.forEach(portal => { portal.userData.hovered = portal === hoveredPortal; });
+    const heroBounds = hero.getBoundingClientRect();
+    tooltip.style.left = `${event.clientX - heroBounds.left}px`;
+    tooltip.style.top = `${event.clientY - heroBounds.top}px`;
+    tooltip.textContent = hoveredPortal?.userData?.label || '';
+    tooltip.classList.toggle('is-visible', Boolean(hoveredPortal));
   };
+
   host.addEventListener('pointermove', updatePointer, { passive: true });
   host.addEventListener('pointerdown', event => {
     pointerDown = { x: event.clientX, y: event.clientY };
@@ -230,13 +233,8 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
       return;
     }
     updatePointer(event);
-    const hit = raycaster.intersectObjects(clickableMeshes, false)[0];
-    const portal = hit?.object?.userData?.portal;
-    if (portal) {
-      portal.scale.setScalar(.92);
-      setTimeout(() => portal.scale.setScalar(1), 170);
-      window.navigateWithTransition?.(portal.userData.target, event);
-    }
+    const portal = raycaster.intersectObjects(clickableMeshes, false)[0]?.object?.userData?.portal;
+    if (portal) window.navigateWithTransition?.(portal.userData.target, event);
     pointerDown = null;
   });
   host.addEventListener('pointerleave', () => {
@@ -244,7 +242,8 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
     pointerY = 0;
     pointerDown = null;
     host.style.cursor = 'grab';
-    portals.forEach(portal => portal.scale.setScalar(1));
+    tooltip.classList.remove('is-visible');
+    portals.forEach(portal => { portal.userData.hovered = false; });
   });
 
   const resize = () => {
@@ -253,7 +252,7 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
     const height = Math.max(1, bounds.height);
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
-    camera.position.z = innerWidth < 720 ? 10 : 9.2;
+    camera.position.z = innerWidth < 720 ? 9.5 : 8.7;
     camera.updateProjectionMatrix();
   };
   new ResizeObserver(resize).observe(host);
@@ -267,39 +266,34 @@ if (host && hero && typeof WebGLRenderingContext !== 'undefined') {
   syncScrollLighting();
 
   let sceneVisible = true;
-  new IntersectionObserver(([entry]) => {
-    sceneVisible = entry.isIntersecting;
-  }, { rootMargin: '180px' }).observe(hero);
+  new IntersectionObserver(([entry]) => { sceneVisible = entry.isIntersecting; }, { rootMargin: '180px' }).observe(hero);
 
   const clock = new THREE.Clock();
   const render = () => {
-    if (!sceneVisible || document.hidden) {
-      requestAnimationFrame(render);
-      return;
-    }
+    requestAnimationFrame(render);
+    if (!sceneVisible || document.hidden) return;
     const elapsed = clock.getElapsedTime();
     const motion = reducedMotion ? 0 : elapsed;
-    world.rotation.y += (pointerX * .26 - world.rotation.y) * .055;
-    world.rotation.x += (-pointerY * .16 - .055 - world.rotation.x) * .055;
-    portrait.position.y = .05 + Math.sin(motion * .82) * .055;
-    portrait.rotation.z = Math.sin(motion * .45) * .012;
-    aura.rotation.z = motion * .075;
-    auraSecond.rotation.z = -.3 - motion * .052;
-    particles.rotation.y = motion * .018;
-    particles.rotation.z = motion * .009;
+    world.rotation.y += (pointerX * .16 - world.rotation.y) * .055;
+    world.rotation.x += (-pointerY * .105 - .025 - world.rotation.x) * .055;
+    character.position.y = -.06 + Math.sin(motion * .82) * .045;
+    character.rotation.z = Math.sin(motion * .42) * .009;
+    coralRing.rotation.z = .12 + motion * .055;
+    mintRing.rotation.z = -.35 - motion * .038;
+    particles.rotation.z = motion * .011;
     portals.forEach(portal => {
-      portal.position.y = portal.userData.baseY + Math.sin(motion * .92 + portal.userData.phase) * .07;
-      portal.rotation.y += ((pointerX * .08) - portal.rotation.y) * .035;
+      portal.position.y = portal.userData.baseY + Math.sin(motion * .88 + portal.userData.phase) * .055;
+      const targetScale = portal.userData.hovered ? 1.2 : 1;
+      portal.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), .13);
+      portal.rotation.y = -world.rotation.y * .55;
     });
-    keyLight.position.x += ((3.8 + pointerX * 2.8) - keyLight.position.x) * .045;
-    keyLight.position.y += ((4.7 + pointerY * 1.7) - keyLight.position.y) * .045;
-    keyLight.intensity = 26 + scrollProgress * 17;
-    rimLight.intensity = 18 + scrollProgress * 13;
-    renderer.toneMappingExposure = 1 + scrollProgress * .2;
-    camera.position.y += ((scrollProgress * .18) - camera.position.y) * .025;
+    coralLight.position.x += ((3.2 + pointerX * 1.8) - coralLight.position.x) * .045;
+    mintLight.position.y += ((-.6 + pointerY * 1.2) - mintLight.position.y) * .045;
+    coralLight.intensity = 18 + scrollProgress * 8;
+    mintLight.intensity = 10 + scrollProgress * 7;
+    renderer.toneMappingExposure = 1.02 + scrollProgress * .12;
     camera.lookAt(0, 0, 0);
     renderer.render(scene, camera);
-    requestAnimationFrame(render);
   };
   render();
 }
