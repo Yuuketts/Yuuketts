@@ -103,6 +103,8 @@ main>.hero,main>.section{transition:filter .55s ease,transform .7s cubic-bezier(
   --shadow:0 18px 50px rgba(48,25,21,.17)
 }
 .site-header.scrolled{background:rgba(234,216,203,.9)}
+.nav-links .portfolio-link{color:var(--mint);border:1px solid rgba(133,203,190,.25);background:rgba(133,203,190,.08)}
+.nav-links .portfolio-link:hover{color:#fff;background:rgba(133,203,190,.16)}
 .hero{gap:34px}
 .hero-description{color:#3b2420}.hero-description strong{color:var(--ink);font-weight:700}
 .role-marquee{background:#2c1916!important;color:#ead8cb!important}

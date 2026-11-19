@@ -6,13 +6,20 @@ const siteTopography = document.querySelector('.site-topography');
 const siteIntro = document.querySelector('[data-site-intro]');
 const enterSiteButton = document.querySelector('[data-enter-site]');
 
-// A introdução funciona como uma capa independente e revela a home em um wipe curto.
-if (siteIntro) {
+// A introdução funciona como uma capa independente e aparece uma vez por sessão.
+// Assim, voltar do portfólio leva direto para o site principal, sem repetir a capa.
+const introSeenThisSession = sessionStorage.getItem('yuuketts-intro-seen') === '1';
+if (siteIntro && introSeenThisSession) {
+  siteIntro.hidden = true;
+  document.body.classList.remove('intro-active');
+}
+if (siteIntro && !introSeenThisSession) {
   let introCanClose = false;
   let introClosing = false;
   const enterSite = () => {
     if (!introCanClose || introClosing) return;
     introClosing = true;
+    sessionStorage.setItem('yuuketts-intro-seen', '1');
     document.body.classList.add('intro-leaving');
     siteIntro.classList.add('is-leaving');
     setTimeout(() => {
